@@ -89,7 +89,7 @@ public class DistressActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 sendSMS("m");
-                Snackbar.make(v, "Auto mode on, Shake to send SOS", Snackbar.LENGTH_LONG)
+                Snackbar.make(v, "SOS Sent, Help is on the way", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
