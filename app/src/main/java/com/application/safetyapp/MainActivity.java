@@ -1,6 +1,7 @@
 package com.application.safetyapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
-                String mobile = phoneEditText.getText().toString().trim();
+                String mobile = "+91"+phoneEditText.getText().toString().trim();
                 verify(mobile);
             }
         });
@@ -122,6 +123,11 @@ public class MainActivity extends AppCompatActivity {
                             data.put("email", emailEditText.getText().toString());
                             childUpdates.put("/info", data);
                             myRef.updateChildren(childUpdates);
+
+                            SharedPreferences pref = getSharedPreferences("MyPref", 0); // 0 - for private mode
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putString("name", nameEditText.getText().toString());
+                            editor.commit();
 
                             Intent intent = new Intent(MainActivity.this, Contacts.class);
                             startActivity(intent);

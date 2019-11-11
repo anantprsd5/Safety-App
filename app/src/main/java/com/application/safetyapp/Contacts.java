@@ -3,6 +3,7 @@ package com.application.safetyapp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -52,6 +53,16 @@ public class Contacts extends AppCompatActivity {
                 data.put("number2", number2.getText().toString());
                 childUpdates.put("/emergency", data);
                 myRef.updateChildren(childUpdates);
+
+                SharedPreferences pref = getSharedPreferences("MyPref", 0); // 0 - for private mode
+                SharedPreferences.Editor editor = pref.edit();
+                String numC = "+91" + number1.getText().toString();
+                String numc2 = "+91"+ number2.getText().toString();
+                editor.putString("num1", numc2);
+                editor.putString("num2", numC);
+                editor.putString("name1", name1.getText().toString());
+                editor.putString("name2", name2.getText().toString());
+                editor.commit();
 
                 Intent intent = new Intent(Contacts.this, DistressActivity.class);
                 startActivity(intent);

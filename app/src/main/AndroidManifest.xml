@@ -3,6 +3,8 @@
     package="com.application.safetyapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:allowBackup="true"
@@ -11,15 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service
-            android:name=".MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="true"></service>
-        <service
-            android:name=".MyFirebaseInstanceIDService"
-            android:enabled="true"
-            android:exported="true" />
-
+        <activity android:name=".EmergencyContactsActivity"></activity>
         <activity
             android:name=".DistressActivity"
             android:label="@string/title_activity_distress"
