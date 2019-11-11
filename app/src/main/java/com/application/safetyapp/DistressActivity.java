@@ -206,6 +206,8 @@ public class DistressActivity extends AppCompatActivity
             Intent intent = new Intent(DistressActivity.this, EmergencyContactsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_maps) {
+            Intent intent=  new Intent(DistressActivity.this, MapsActivity.this);
+            startActivity(intent);
 
         } else if (id == R.id.nav_settings) {
 
