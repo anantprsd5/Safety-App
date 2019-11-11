@@ -1,10 +1,12 @@
 package com.application.safetyapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,7 +21,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -28,15 +34,27 @@ public class MainActivity extends AppCompatActivity {
     Button signIn;
     EditText phoneEditText;
     private FirebaseAuth mAuth;
+    private ProgressBar progressBar;
+    EditText nameEditText;
+    EditText emailEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null){
+            Intent intent = new Intent(this, DistressActivity.class);
+            startActivity(intent);
+        }
         
         mAuth = FirebaseAuth.getInstance();
         signIn = findViewById(R.id.signin);
         phoneEditText = findViewById(R.id.phoneEditText);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+        nameEditText = findViewById(R.id.name);
+        emailEditText = findViewById(R.id.email);
         setOnClickListener();
     }
 
@@ -44,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 String mobile = phoneEditText.getText().toString().trim();
                 verify(mobile);
             }
@@ -91,8 +110,27 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("sign in succ", "signInWithCredential:success");
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getApplicationContext(), "Sign in Successful", Toast.LENGTH_SHORT).show();
 
                             FirebaseUser user = task.getResult().getUser();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference myRef = database.getReference("/"+user.getUid());
+                            Map<String, Object> childUpdates = new HashMap<>();
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("name", nameEditText.getText().toString());
+                            data.put("email", emailEditText.getText().toString());
+                            childUpdates.put("/info", data);
+                            myRef.updateChildren(childUpdates);
+
+                            Intent intent = new Intent(MainActivity.this, Contacts.class);
+                            startActivity(intent);
+
+                            // Write a message to the database
+                            progressBar.setVisibility(View.INVISIBLE);
+
+
+
                             // ...
                         } else {
                             // Sign in failed, display a message and update the UI
