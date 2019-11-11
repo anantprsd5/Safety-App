@@ -2,16 +2,19 @@ package com.application.safetyapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,12 +35,13 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button signIn;
+    CardView signIn;
     EditText phoneEditText;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
     EditText nameEditText;
     EditText emailEditText;
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.INVISIBLE);
         nameEditText = findViewById(R.id.name);
         emailEditText = findViewById(R.id.email);
+        textView = findViewById(R.id.textView);
         setOnClickListener();
     }
 
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
+                textView.setVisibility(View.INVISIBLE);
                 String mobile = "+91"+phoneEditText.getText().toString().trim();
                 verify(mobile);
             }
